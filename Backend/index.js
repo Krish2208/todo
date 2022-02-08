@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const User = require('./models/User.js');
 const Todo = require('./models/Todo.js')
 
-const connectionurl = "mongodb+srv://admin:admin@cluster0.qii1l.mongodb.net/todo"
+const connectionurl = "database-url.com/app-name"
 
 mongoose.connect(connectionurl);
 
