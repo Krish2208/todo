@@ -91,8 +91,8 @@ export default function Todo() {
                 <Box sx={{ width: '100vw', marginX: 2, marginTop: 3 }}>
                     {matches ? <Accordion disableGutters elevation={4} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                         <AccordionSummary expandIcon={<ExpandMore />}><Typography variant='h5'>Summary</Typography></AccordionSummary>
-                        <AccordionDetails><Summary ma='8px' /></AccordionDetails>
-                    </Accordion> : <Summary />}
+                        <AccordionDetails><Summary ma='8px' total={todoList.length} completed={(todoList.filter((todoitm)=> todoitm.isCompleted === true)).length} /></AccordionDetails>
+                    </Accordion> : <Summary total={todoList.length} completed={(todoList.filter((todoitm)=> todoitm.isCompleted === true)).length} />}
                 </Box>
                 <Box sx={{ width: '100vw', marginX: 2, marginTop: 3, overflowY: 'scroll', height: '60vh' }}>
                     {matches ? <Accordion disableGutters elevation={4} expanded={expanded === 'panel2'} onChange={handleChange('panel2')} >
