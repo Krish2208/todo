@@ -3,7 +3,7 @@ import Header from './header';
 import { Grid, Box, Accordion, AccordionSummary, AccordionDetails, Typography, Fab, Modal, Paper, TextField, Button, FormControl, Select, MenuItem, InputLabel, Menu, ListItemIcon } from '@mui/material';
 import Summary from './summary';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { AccountCircleOutlined, Add, Assignment, ContactPageSharp, ExpandMore, FilterListOutlined, HomeOutlined, TaskOutlined, WorkOutlined } from '@mui/icons-material';
+import { AccountCircleOutlined, Add, Assignment, ExpandMore, FilterListOutlined, HomeOutlined, TaskOutlined, WorkOutlined } from '@mui/icons-material';
 import TodoCard from './todoCard';
 import axios from 'axios';
 
