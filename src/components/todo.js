@@ -1,9 +1,9 @@
 import React from 'react';
 import Header from './header';
-import { Grid, Box, Accordion, AccordionSummary, AccordionDetails, Typography, Fab, Modal, Paper, TextField, Button, FormControl, Select, MenuItem, InputLabel } from '@mui/material';
+import { Grid, Box, Accordion, AccordionSummary, AccordionDetails, Typography, Fab, Modal, Paper, TextField, Button, FormControl, Select, MenuItem, InputLabel, Menu, ListItemIcon } from '@mui/material';
 import Summary from './summary';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { Add, ExpandMore } from '@mui/icons-material';
+import { AccountCircleOutlined, Add, Assignment, ContactPageSharp, ExpandMore, FilterListOutlined, HomeOutlined, TaskOutlined, WorkOutlined } from '@mui/icons-material';
 import TodoCard from './todoCard';
 import axios from 'axios';
 
@@ -29,11 +29,13 @@ const styleMobile = {
 
 export default function Todo() {
     const [todoList, setTodoList] = React.useState([]);
+    const [listCopy, setListCopy] = React.useState([]);
     React.useEffect(() => {
         axios.get('http://localhost:5000/todos', { headers: { token: localStorage.getItem('token') } })
             .then(res => {
                 if (res.status === 200) {
                     setTodoList(res.data.todos);
+                    setListCopy(res.data.todos);
                 }
             })
     }, [])
@@ -61,6 +63,7 @@ export default function Todo() {
             if (res.status === 200) {
                 let todo = res.data.todo;
                 setTodoList([...todoList, todo]);
+                setListCopy([...todoList, todo]);
                 setTitle("");
                 setCategory("");
                 setDescription("");
@@ -76,6 +79,25 @@ export default function Todo() {
     const handleDelete = (deletedTodo) => {
         let newList = todoList.filter((todoitm) => todoitm._id != deletedTodo._id);
         setTodoList(newList);
+        setListCopy(newList);
+    };
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const openMenu = Boolean(anchorEl);
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    }
+    const handleFilter = (value) => {
+        if (value === "All") {
+            let filterList = listCopy;
+            setTodoList(filterList);
+        }
+        else {
+            let filterList = listCopy.filter((todoitm) => todoitm.category === value);
+            setTodoList(filterList);
+        }
     }
     const matches = useMediaQuery('(max-width:600px)');
     const token = localStorage.getItem('token');
@@ -94,10 +116,24 @@ export default function Todo() {
                         <AccordionDetails><Summary ma='8px' total={todoList.length} completed={(todoList.filter((todoitm) => todoitm.isCompleted === true)).length} /></AccordionDetails>
                     </Accordion> : <Summary total={todoList.length} completed={(todoList.filter((todoitm) => todoitm.isCompleted === true)).length} />}
                 </Box>
-                <Box sx={{ width: '100vw', marginX: 2, marginTop: 3, overflowY: 'scroll', height: '60vh' }}>
+                {!matches ? <Button
+                    variant="contained"
+                    sx={{ mt: 1.5, marginLeft: 6 }}
+                    startIcon={<FilterListOutlined />}
+                    onClick={handleMenuOpen}
+                >
+                    Filter
+                </Button> : null}
+                <Box sx={{ width: '100vw', marginX: 2, marginTop: 0.5, overflowY: 'scroll', height: '60vh' }}>
                     {matches ? <Accordion disableGutters elevation={4} expanded={expanded === 'panel2'} onChange={handleChange('panel2')} >
                         <AccordionSummary expandIcon={<ExpandMore />}><Typography variant='h5'>Tasks</Typography></AccordionSummary>
-                        <AccordionDetails>{todoList.map((todo) => (
+                        <AccordionDetails><Button
+                            variant="contained"
+                            startIcon={<FilterListOutlined />}
+                            onClick={handleMenuOpen}
+                        >
+                            Filter
+                        </Button>{todoList.map((todo) => (
                             <TodoCard todo={todo} handleDelete={handleDelete} />
                         ))}</AccordionDetails>
                     </Accordion> : todoList.map((todo) => (
@@ -127,7 +163,7 @@ export default function Todo() {
                                 label="Description"
                                 onChange={(e) => setDescription(e.target.value)}
                             />
-                            <FormControl fullWidth margin='normal'>
+                            <FormControl fullWidth margin='normal' required>
                                 <InputLabel>Category</InputLabel>
                                 <Select
                                     margin="normal"
@@ -155,6 +191,13 @@ export default function Todo() {
                     </Paper>
                 </Box>
             </Modal>
+            <Menu anchorEl={anchorEl} open={openMenu} onClose={handleMenuClose} onClick={handleMenuClose} PaperProps={{ elevation: 2 }}>
+                <MenuItem onClick={() => handleFilter("All")}><ListItemIcon><Assignment /></ListItemIcon> All</MenuItem>
+                <MenuItem onClick={() => handleFilter("Personal")}><ListItemIcon><AccountCircleOutlined /></ListItemIcon>Personal</MenuItem>
+                <MenuItem onClick={() => handleFilter("Home")}><ListItemIcon><HomeOutlined /></ListItemIcon>Home</MenuItem>
+                <MenuItem onClick={() => handleFilter("Work")}><ListItemIcon><WorkOutlined /></ListItemIcon>Work</MenuItem>
+                <MenuItem onClick={() => handleFilter("Other")}><ListItemIcon><TaskOutlined /></ListItemIcon>Other</MenuItem>
+            </Menu>
         </div>
     );
 }
