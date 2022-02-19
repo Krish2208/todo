@@ -115,9 +115,7 @@ The ‘/todo’ is the main page, it links to the main app page, initially, it c
 
 The Summary Component takes in the number of todo and the number of completed tasks. It then renders the cards containing the details about the number of todos, how many are completed and how many are pending, to give a gist.
 
-The todo component renders todoCard for each of the objects in the todoList. It checks the category of the todo - “Personal”, “Home”, “Work” or “Others” and renders an Avatar accordingly. The colour of the Avatar and its background depends on the isCompleted attribute.
-
-There are two buttons on each card, one to mark the task as done, and the other to delete the todo. The Mark as done button sends a request to the backend on ‘/done/:todoId’. The Delete button sends a request to the backend on ‘/delete/:todoId’.
+The todo component renders todoCard for each of the objects in the todoList. It checks the category of the todo - “Personal”, “Home”, “Work” or “Others” and renders an Avatar accordingly. The colour of the Avatar and its background depends on the isCompleted attribute.There are two buttons on each card, one to mark the task as done, and the other to delete the todo. The Mark as done button sends a request to the backend on ‘/done/:todoId’. The Delete button sends a request to the backend on ‘/delete/:todoId’. There is a Filter button in the todoComponent which filters the list on the basis of the task category. 
 
 The todo Component also contains a FAB which opens a Modal to create a new todo. There is a form in the modal with text fields for title and description and a select component for choosing the category and on pressing the create button it sends a request on ‘/todo’ with all the required data on getting a success it takes the returned todo and adds it to the todoList.
 
@@ -133,6 +131,7 @@ The todo Component also contains a FAB which opens a Modal to create a new todo.
     
 -   Todo Category
     -   Todos can be categorized in various ways to make them more useful. Each Category and completion status gives a different look to the avatar making it visible differently.
+    -   Filter the todoList on the basis of category.
     
 -   Summary
     -   It is generated to give a brief about the scheduled tasks.
